@@ -1,0 +1,72 @@
+@startuml
+title LocalFix - Sprint 3
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+actor "Help Requester" as HR
+actor "Helper" as H
+actor "Admin" as A
+
+' Requested heritage between Helper and Help Requester
+H --|> HR
+
+rectangle "LocalFix - Sprint 3" {
+  usecase "Authenticate" as UC_AUTH
+
+  usecase "Commit to Open Task" as UC_COMMIT
+  usecase "Update Task State" as UC_UPDATE_STATE
+  usecase "Mark Task as Completed" as UC_COMPLETE
+  usecase "Close Task" as UC_CLOSE
+
+  usecase "Receive Notification" as UC_NOTIFY
+  usecase "Push Alert on Event" as UC_PUSH
+
+  usecase "Browse on Map" as UC_MAP
+  usecase "Filter by Category" as UC_FILTER
+
+  usecase "Review Report" as UC_REVIEW
+  usecase "Resolve Report" as UC_RESOLVE
+  usecase "Notify Reporter" as UC_NOTIFY_REPORTER
+
+  usecase "View Task Register" as UC_REGISTER
+  usecase "Manage Account List" as UC_ACCOUNTS
+  usecase "Suspend Account" as UC_SUSPEND
+}
+
+HR --> UC_UPDATE_STATE
+HR --> UC_COMPLETE
+HR --> UC_NOTIFY
+
+H --> UC_COMMIT
+H --> UC_NOTIFY
+H --> UC_MAP
+
+A --> UC_REVIEW
+A --> UC_RESOLVE
+A --> UC_REGISTER
+A --> UC_ACCOUNTS
+
+UC_COMPLETE ..> UC_CLOSE : <<include>>
+UC_PUSH ..> UC_NOTIFY : <<extend>>
+UC_FILTER ..> UC_MAP : <<extend>>
+UC_RESOLVE ..> UC_NOTIFY_REPORTER : <<include>>
+UC_SUSPEND ..> UC_ACCOUNTS : <<extend>>
+
+' Authentication included by all sprint 3 actions
+UC_COMMIT ..> UC_AUTH : <<include>>
+UC_UPDATE_STATE ..> UC_AUTH : <<include>>
+UC_COMPLETE ..> UC_AUTH : <<include>>
+UC_CLOSE ..> UC_AUTH : <<include>>
+UC_NOTIFY ..> UC_AUTH : <<include>>
+UC_PUSH ..> UC_AUTH : <<include>>
+UC_MAP ..> UC_AUTH : <<include>>
+UC_FILTER ..> UC_AUTH : <<include>>
+UC_REVIEW ..> UC_AUTH : <<include>>
+UC_RESOLVE ..> UC_AUTH : <<include>>
+UC_NOTIFY_REPORTER ..> UC_AUTH : <<include>>
+UC_REGISTER ..> UC_AUTH : <<include>>
+UC_ACCOUNTS ..> UC_AUTH : <<include>>
+UC_SUSPEND ..> UC_AUTH : <<include>>
+@enduml
+

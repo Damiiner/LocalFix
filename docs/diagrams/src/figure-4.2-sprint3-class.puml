@@ -1,0 +1,133 @@
+@startuml
+title Sprint 3 Class Diagram
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+
+enum UserRole {
+  MEMBER
+  ADMINISTRATOR
+}
+
+enum TaskStatus {
+  OPEN
+  ACCEPTED
+  IN_PROGRESS
+  COMPLETE
+  CLOSED
+  CANCELLED
+}
+
+enum NotificationEvent {
+  TASK_ACCEPTED
+  TASK_COMPLETED
+  TASK_CANCELLED
+  REPORT_RESOLVED
+  SYSTEM_ALERT
+}
+
+enum ReportStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+  DISMISSED
+}
+
+class User {
+  +id: int
+  +name: string
+  +email: string
+  +passwordHash: string
+  +status: string
+  +role: UserRole
+  +createdAt: Date
+  +updatedAt: Date
+  --
+  +register(): void
+  +deactivate(): void
+  +isAdmin(): boolean
+}
+
+class Task {
+  +id: int
+  +requesterId: int
+  +helperId: int?
+  +title: string
+  +description: string
+  +status: TaskStatus
+  +category: string
+  +createdAt: Date
+  +updatedAt: Date
+  --
+  +accept(helperId: int): void
+  +start(): void
+  +complete(): void
+  +close(): void
+  +cancel(): void
+}
+
+class Attachment {
+  +id: int
+  +taskId: int
+  +filename: string
+  +mimeType: string
+  +sizeBytes: int
+  +storageKey: string
+  +uploadedBy: int
+  +uploadedAt: Date
+}
+
+class Notification {
+  +id: int
+  +userId: int
+  +event: NotificationEvent
+  +referenceId: int
+  +message: string
+  +read: boolean
+  +createdAt: DateTime
+  --
+  +markRead(): void
+}
+
+class Report {
+  +id: int
+  +reporterId: int
+  +targetUserId: int
+  +reason: string
+  +status: ReportStatus
+  +assignedTo: int?
+  +resolutionNote: string?
+  +verified: boolean
+  +createdAt: Date
+  +updatedAt: Date
+  --
+  +assign(adminId: int): void
+  +resolve(note: string): void
+  +dismiss(): void
+}
+
+class MapPin <<projection>> {
+  +taskId: int
+  +title: string
+  +category: string
+  +status: TaskStatus
+  +latitude: float
+  +longitude: float
+  +helperName: string?
+  +helperAvatarUrl: string?
+}
+
+' Associations (no diamonds/circles as requested)
+User "1" -- "0..*" Task : requests
+User "0..1" -- "0..*" Task : helps
+Task "1" -- "0..*" Attachment : has
+User "1" -- "0..*" Notification : receives
+User "1" -- "0..*" Report : submits
+Report "0..*" -- "0..1" User : assigned admin
+Report "0..*" -- "1" User : target
+Notification ..> NotificationEvent : typed by
+Task ..> TaskStatus : uses
+User ..> UserRole : uses
+Report ..> ReportStatus : uses
+@enduml
+

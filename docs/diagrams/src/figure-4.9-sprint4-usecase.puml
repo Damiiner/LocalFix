@@ -1,0 +1,38 @@
+@startuml
+title LocalFix - Sprint 4
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+actor "Help Requester" as HR
+actor "Helper" as H
+
+' Requested heritage between Helper and Help Requester
+H --|> HR
+
+rectangle "LocalFix - Sprint 4" {
+  usecase "Authenticate" as UC_AUTH
+  usecase "Mark Task as Complete" as UC_COMPLETE
+  usecase "Submit a Review" as UC_REVIEW
+  usecase "Select Score" as UC_SCORE
+  usecase "Write Comment" as UC_COMMENT
+  usecase "View Rating (on profile)" as UC_VIEW_RATING
+  usecase "View Average Score" as UC_AVG
+}
+
+HR --> UC_COMPLETE
+HR --> UC_REVIEW
+HR --> UC_VIEW_RATING
+
+H --> UC_VIEW_RATING
+
+UC_COMPLETE ..> UC_AUTH : <<include>>
+UC_REVIEW ..> UC_AUTH : <<include>>
+UC_VIEW_RATING ..> UC_AUTH : <<include>>
+
+UC_REVIEW ..> UC_SCORE : <<include>>
+UC_REVIEW ..> UC_COMMENT : <<include>>
+
+UC_VIEW_RATING ..> UC_AVG : <<include>>
+@enduml
+

@@ -1,0 +1,44 @@
+@startuml
+title Sprint 3 Sequence Diagram - Admin resolves report
+hide footbox
+skinparam shadowing false
+
+actor Administrator as Admin
+boundary View
+control Controller
+entity Service
+database Repository
+control Notifier
+
+Admin -> View : opens workspace
+View -> Controller : fetch open reports
+Controller -> Service : listOpenReports()
+Service -> Repository : findOpen()
+Repository --> Service : reports
+Service --> Controller : report list
+Controller --> View : report list
+View --> Admin : render queue
+
+Admin -> View : clicks \"Assign\"
+View -> Controller : assignReport(reportId, adminId)
+Controller -> Service : assignReport()
+Service -> Repository : findById(reportId)
+Repository --> Service : report
+Service -> Repository : update(report)
+Repository --> Service : saved
+Service --> Controller : updated report
+Controller --> View : updated report
+
+Admin -> View : show report detail\nenters note, clicks action
+View -> Controller : resolveReport(reportId, note)\nor dismissReport(reportId)
+Controller -> Service : resolveReport() / dismissReport()
+Service -> Repository : update(report)
+Repository --> Service : saved
+Service -> Notifier : notify(reporterId,\nREPORT_RESOLVED)
+Notifier --> Service : notification created
+Service --> Controller : final report state
+Controller --> View : final report state
+
+View --> Admin : show confirmation\nremove from queue
+@enduml
+

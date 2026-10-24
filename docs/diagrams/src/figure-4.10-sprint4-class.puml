@@ -1,0 +1,79 @@
+@startuml
+title Sprint 4 Class Diagram
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+
+enum UserRole {
+  MEMBER
+  ADMINISTRATOR
+}
+
+enum TaskStatus {
+  OPEN
+  ACCEPTED
+  IN_PROGRESS
+  COMPLETED
+  CLOSED
+  CANCELLED
+}
+
+class User {
+  +id: int
+  +name: string
+  +email: string
+  +passwordHash: string
+  +status: string
+  +role: UserRole
+  +createdAt: Date
+  --
+  +login(): boolean
+  +updateAverageRating(): void
+}
+
+class Task {
+  +id: int
+  +requesterId: int
+  +helperId: int?
+  +title: string
+  +status: TaskStatus
+  +category: string
+  +createdAt: Date
+  +updatedAt: Date
+  --
+  +accept(helperId: int): void
+  +close(): void
+}
+
+class Rating {
+  +id: int
+  +taskId: int
+  +raterId: int
+  +helperId: int
+  +score: int
+  +comment: string
+  +createdAt: Date
+  --
+  +submit(): void
+  +validate(): boolean
+  +getStarDisplay(): string
+}
+
+class RatingView {
+  +helperId: int
+  +averageScore: float
+  +totalReviews: int
+  --
+  +render(): void
+}
+
+' Associations (no diamonds/circles as requested)
+User "1" -- "0..*" Rating : rates
+User "1" -- "0..*" Task : requests
+User "0..1" -- "0..*" Task : helps
+Task "1" -- "0..1" Rating : receives
+RatingView ..> Rating : uses
+Task ..> TaskStatus : uses
+User ..> UserRole : uses
+@enduml
+

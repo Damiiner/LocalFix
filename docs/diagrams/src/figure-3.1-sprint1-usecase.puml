@@ -1,0 +1,40 @@
+@startuml
+title LocalFix - Sprint 1
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+actor "Help Requester" as HR
+actor "Helper" as H
+
+' Requested heritage between Helper and Help Requester
+H --|> HR
+
+rectangle "LocalFix - Sprint 1" {
+  usecase "Authenticate" as UC_AUTH
+  usecase "Create Task" as UC_CREATE
+  usecase "View Task" as UC_VIEW
+  usecase "Edit Task" as UC_EDIT
+  usecase "Delete Task" as UC_DELETE
+  usecase "Browse Tasks" as UC_BROWSE
+  usecase "View Task Details" as UC_DETAILS
+}
+
+HR --> UC_CREATE
+HR --> UC_VIEW
+HR --> UC_EDIT
+HR --> UC_DELETE
+
+H --> UC_BROWSE
+H --> UC_DETAILS
+
+UC_CREATE ..> UC_AUTH : <<include>>
+UC_VIEW ..> UC_AUTH : <<include>>
+UC_EDIT ..> UC_AUTH : <<include>>
+UC_DELETE ..> UC_AUTH : <<include>>
+UC_BROWSE ..> UC_AUTH : <<include>>
+UC_DETAILS ..> UC_AUTH : <<include>>
+
+UC_BROWSE ..> UC_DETAILS : <<include>>
+@enduml
+

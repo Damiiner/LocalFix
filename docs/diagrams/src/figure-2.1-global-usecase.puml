@@ -1,0 +1,46 @@
+@startuml
+title LocalFix System
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+actor "Help Requester" as HR
+actor "Helper" as H
+actor "Administrator" as A
+
+' Requested heritage between Helper and Help Requester
+H --|> HR
+
+rectangle "LocalFix System" {
+  usecase "Authenticate" as UC_AUTH
+  usecase "Browse Tasks" as UC_BROWSE
+  usecase "View Profile" as UC_PROFILE
+  usecase "Chat" as UC_CHAT
+  usecase "Accept Task" as UC_ACCEPT
+  usecase "Mark as Done" as UC_DONE
+  usecase "Rate and Review" as UC_RATE
+  usecase "Manage Users" as UC_USERS
+}
+
+HR --> UC_BROWSE
+HR --> UC_PROFILE
+HR --> UC_CHAT
+
+H --> UC_ACCEPT
+H --> UC_DONE
+H --> UC_RATE
+
+A --> UC_USERS
+A --> UC_BROWSE
+
+UC_BROWSE ..> UC_AUTH : <<include>>
+UC_PROFILE ..> UC_AUTH : <<include>>
+UC_CHAT ..> UC_AUTH : <<include>>
+UC_ACCEPT ..> UC_AUTH : <<include>>
+UC_DONE ..> UC_AUTH : <<include>>
+UC_RATE ..> UC_AUTH : <<include>>
+UC_USERS ..> UC_AUTH : <<include>>
+
+UC_DONE ..> UC_RATE : <<include>>
+@enduml
+

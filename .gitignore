@@ -1,0 +1,19 @@
+# Node / Vite
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+
+# LaTeX build files (keep .tex and .pdf)
+docs/*.aux
+docs/*.log
+docs/*.out
+docs/*.toc
+docs/*.synctex.gz
+
+# IDE / OS
+.idea/
+.vscode/
+Thumbs.db
+.DS_Store
